@@ -46,8 +46,9 @@ public class PaperPlatform implements Platform {
 
   @Override
   public @NotNull String encodeStack(@NotNull final ItemStack stack) {
-
-    return Base64.getEncoder().encodeToString(stack.serializeAsBytes());
+    ItemStack encodeStack = stack.clone();
+    encodeStack.setAmount(Math.min(stack.getAmount(), stack.getMaxStackSize()));
+    return Base64.getEncoder().encodeToString(encodeStack.serializeAsBytes());
   }
 
   @Override

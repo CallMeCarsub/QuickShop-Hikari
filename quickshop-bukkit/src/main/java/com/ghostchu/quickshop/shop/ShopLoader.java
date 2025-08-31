@@ -347,14 +347,16 @@ public class ShopLoader implements SubPasteItem {
         this.permissions = new HashMap<>();
       }
 
+      ItemStack bukkitStack = deserializeItem(dataRecord.getItem());
 
       if(dataRecord.getEncoded() != null && !dataRecord.getEncoded().isEmpty()) {
 
         this.item = QuickShop.getInstance().getPlatform().decodeStack(dataRecord.getEncoded());
+        this.item.setAmount(bukkitStack.getAmount());
         this.newItem = item;
       } else {
 
-        this.item = deserializeItem(dataRecord.getItem());
+        this.item = bukkitStack;
       }
       this.extra = deserializeExtra(extraStr);
     }
