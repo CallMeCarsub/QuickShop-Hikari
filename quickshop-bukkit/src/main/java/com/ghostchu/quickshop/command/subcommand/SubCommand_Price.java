@@ -8,6 +8,7 @@ import com.ghostchu.quickshop.obj.QUserImpl;
 import com.ghostchu.quickshop.util.ShopUtil;
 import com.ghostchu.quickshop.util.Util;
 import com.ghostchu.quickshop.util.logger.Log;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,21 +35,30 @@ public class SubCommand_Price implements CommandHandler<Player> {
 
     BigDecimal price = null;
     try {
-      price = Util.parse(parser.getArgs().get(0));
+      price = Util.parse(parser.getArgs().getFirst());
     } catch(final Exception ignore) {
     }
 
     if(price == null) {
       // No number input
       Log.debug("Price sub command had issue with price parameter.");
-      plugin.text().of(sender, "not-a-number", parser.getArgs().get(0)).send();
+      plugin.text().of(sender, "not-a-number", parser.getArgs().getFirst()).send();
       return;
+    }
+
+    final int maximumDigitsInPrice = plugin.getConfig().getInt("shop.maximum-digits-in-price", -1);
+    if(maximumDigitsInPrice != -1) {
+      final int inputScale = Math.max(price.stripTrailingZeros().scale(), 0);
+      if(inputScale > maximumDigitsInPrice) {
+        plugin.text().of(sender, "digits-reach-the-limit", Component.text(maximumDigitsInPrice)).send();
+        return;
+      }
     }
 
     final double priceDouble = price.doubleValue();
     // No number input
     if(Double.isInfinite(priceDouble) || Double.isNaN(priceDouble)) {
-      plugin.text().of(sender, "not-a-number", parser.getArgs().get(0)).send();
+      plugin.text().of(sender, "not-a-number", parser.getArgs().getFirst()).send();
       return;
     }
     final Shop shop = getLookingShop(sender);
