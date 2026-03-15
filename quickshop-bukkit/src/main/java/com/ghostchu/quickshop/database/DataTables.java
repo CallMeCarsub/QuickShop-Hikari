@@ -27,6 +27,7 @@ public enum DataTables {
     table.addColumn("owner", "VARCHAR(128) NOT NULL"); // SHOP DATA OWNER (ALL-ZERO if this is a server shop)
 
     table.addColumn("item", "TEXT NOT NULL"); // SHOP DATA ITEM INFO
+    table.addColumn("itemQuantity", "INT UNSIGNED"); // SHOP DATA ITEM INFO
     table.addColumn("encoded", "TEXT NOT NULL"); // SHOP DATA ITEM INFO
     table.addColumn("name", "TEXT"); // SHOP NAME
 

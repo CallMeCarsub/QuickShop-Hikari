@@ -27,6 +27,9 @@ public interface DataRecord {
   String getItem();
 
   @NotNull
+  int getItemQuantity();
+
+  @NotNull
   String getEncoded();
 
   @Nullable

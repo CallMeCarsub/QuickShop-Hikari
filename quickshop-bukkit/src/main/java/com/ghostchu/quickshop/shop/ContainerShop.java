@@ -1770,6 +1770,7 @@ public class ContainerShop implements Shop, Reloadable {
     return new SimpleDataRecord(
             getOwner(),
             plugin.platform().encodeStack(getItem()),
+            getItem().getAmount(),
             plugin.platform().encodeStack(getItem()),
             getShopName(),
             shopType().id(),

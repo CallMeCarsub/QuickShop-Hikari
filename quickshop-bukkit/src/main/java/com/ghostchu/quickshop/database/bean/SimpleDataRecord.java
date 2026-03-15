@@ -20,6 +20,7 @@ public class SimpleDataRecord implements DataRecord {
 
   private final QUser owner;
   private final String item;
+  private final int itemQuantity;
   private final String encoded;
   private final String name;
   private final int type;
@@ -36,7 +37,7 @@ public class SimpleDataRecord implements DataRecord {
 
   private final String benefit;
 
-  public SimpleDataRecord(final QUser owner, final String item, final String encoded, final String name,
+  public SimpleDataRecord(final QUser owner, final String item, final int itemQuantity, final String encoded, final String name,
                           final int type, final String currency, final double price, final boolean unlimited,
                           final boolean hologram, final QUser taxAccount, final String permissions,
                           final String extra, final String inventoryWrapper, final String inventorySymbolLink,
@@ -44,6 +45,7 @@ public class SimpleDataRecord implements DataRecord {
 
     this.owner = owner;
     this.item = item;
+    this.itemQuantity = itemQuantity;
     this.encoded = encoded;
     this.name = name;
     this.type = type;
@@ -71,6 +73,8 @@ public class SimpleDataRecord implements DataRecord {
     } else {
       this.encoded = encodedRead;
     }
+
+    this.itemQuantity = set.getInt("itemQuantity");
 
     this.name = set.getString("name");
     this.type = set.getInt("type");
@@ -102,6 +106,7 @@ public class SimpleDataRecord implements DataRecord {
     final Map<String, Object> map = new LinkedHashMap<>();
     map.put("owner", owner.serialize());
     map.put("item", item);
+    map.put("itemQuantity", itemQuantity);
     map.put("encoded", encoded);
     map.put("name", name);
     map.put("type", type);
@@ -157,6 +162,11 @@ public class SimpleDataRecord implements DataRecord {
   public @NotNull String getItem() {
 
     return item;
+  }
+
+  @Override
+  public int getItemQuantity() {
+    return itemQuantity;
   }
 
   @Override

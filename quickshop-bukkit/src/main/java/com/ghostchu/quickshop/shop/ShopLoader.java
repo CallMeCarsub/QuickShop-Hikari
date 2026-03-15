@@ -351,12 +351,24 @@ public class ShopLoader implements SubPasteItem {
         Log.debug("Shop :" +  name + " doesn't have encoded item. Cannot load.");
       }
 
+      ItemStack bukkitItem;
+      int quantity = dataRecord.getItemQuantity();
+      try {
+        bukkitItem = deserializeItem(dataRecord.getItem());
+      }catch (Exception e){
+        Log.debug("BUKKIT ITEM LOAD FAILED, ignoring! this is fine!");
+        bukkitItem = null;
+      }
+      if(bukkitItem != null){
+        quantity = bukkitItem.getAmount();
+      }
+
       boolean encodedLoaded = false;
       if(dataRecord.getEncoded() != null && !dataRecord.getEncoded().isEmpty()) {
         Log.debug("Shop has correct encoded item type, loaded as usual.");
 
-        this.item = QuickShop.getInstance().getPlatform().decodeStack(dataRecord.getEncoded());
-        this.item.setAmount(bukkitStack.getAmount());
+        this.item = QuickShop.getInstance().platform().decodeStack(dataRecord.getEncoded());
+        if(quantity > 0) this.item.setAmount(quantity);
         this.newItem = item;
 
         encodedLoaded = true;
@@ -366,6 +378,7 @@ public class ShopLoader implements SubPasteItem {
         Log.debug("Attempting to migrate shop to new encoded type....");
 
         this.item = deserializeItem(dataRecord.getItem());
+        if(quantity > 0) this.item.setAmount(quantity);
         this.newItem = item;
         needUpdate = true;
       }
